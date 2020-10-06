@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href='/static/css/bootstrap.min.css'>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <title>搜索页面</title>
+</head>
+<body class="text-center bg-light">
+<div style="height: 150px"></div>
+<form action="/result/" method="POST" role="form">
+    <h1>请输入关键字:</h1><br>
+    <input type="text" name="keyword" class="input-group-lg"><br><br>
+    <input type="submit" value="查询数据" class="btn btn-success btn-lg">
+    <button type="reset" class="btn btn-success btn-lg">清空</button>
+</form>
+</body>
+</html>
