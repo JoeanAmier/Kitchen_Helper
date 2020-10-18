@@ -21,5 +21,10 @@ def result():
         return '无效参数'
 
 
+@app.route('/test/')
+def test():
+    return render_template('test.html')
+
+
 if __name__ == '__main__':
     app.run()

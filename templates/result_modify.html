@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href='/static/css/bootstrap.min.css'>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <title>搜索结果</title>
+    <style>
+        td {
+            width: 25%;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body class="bg-light">
+<h1 class="text-center">查询结果:</h1>
+<p class="text-center"><a href="/">返回搜索页面</a></p>
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <p>&nbsp&nbsp&nbsp&nbsp数据来源：{{ source }}</p>
+        <table class="table text-center table-striped table-bordered table-hover" cellpadding="5">
+            <tr>
+                <th>菜名</th>
+                <th>用料</th>
+                <th>做法</th>
+                <th>效果图</th>
+            </tr>
+            {% if data != None %}
+                {% for item in data %}
+                    <tr>
+                        <td><a href="{{ item[4] }}" target="_blank">{{ item[0] }}</a></td>
+                        <td>{{ item[1] }}</td>
+                        <td>
+                            <div style="height: 200px;" class="pre-scrollable">
+                                {{ item[2] }}
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{{ item[3] }}" target="_blank">
+                                <img src="{{ item[3] }}" alt="效果图" class="img-thumbnail img-fluid"
+                                     style="height: 175px;"><br>
+                                <p>点击查看大图</p>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">无数据</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+</body>
+</html>
