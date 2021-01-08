@@ -18,9 +18,9 @@ def get_url(url):
     time.sleep(random.randrange(4, 7, 1))  # 减慢爬取速度
     href = html.html.find(
         '.recipe.recipe-215-horizontal.pure-g.image-link.display-block > a')  # 匹配每个菜品的详细链接
-    for url in href[:3]:  # 只获取前 10 个菜品的详细链接，可修改
+    for url in href[:3]:  # 只获取前 3 个菜品的详细链接，可修改
         item_url.append('http://www.xiachufang.com' + url.attrs['href'])
-    return item_url  # 返回搜索结果前 10 个菜品的详细链接
+    return item_url  # 返回搜索结果前 3 个菜品的详细链接
 
 
 def open_url(url):
