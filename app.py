@@ -15,14 +15,18 @@ def hello_world():
 
 @app.route('/result/', methods=['GET', 'POST'])
 def result():
-    clear()
+    clear()  # 检查缓存目录
     if request.method == 'POST':
         keyword = request.form['keyword']
-        source, data = select(keyword)
-        cache = [[i[0], i[3]] for i in data]
-        for i in cache:
-            download(i[0], i[1])
-        return render_template('result_modify.html', source=source, data=data)
+        if keyword:
+            source, data = select(keyword)
+            cache = [[i[0], i[3]] for i in data]
+            for i in cache:
+                download(i[0], i[1])  # 下载效果图
+            return render_template(
+                'result_modify.html', source=source, data=data)
+        else:
+            return '无效参数'
     else:
         return '无效参数'
 
