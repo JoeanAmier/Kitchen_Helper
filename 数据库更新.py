@@ -2,6 +2,8 @@ import time
 import random
 import sqlite3
 from requests_html import HTMLSession
+import re
+import emoji
 
 
 def get_page_url():
@@ -45,13 +47,15 @@ def get_data(url_list):
             time.sleep(random.randrange(4, 7, 1))  # 减慢爬取速度
             title = html.html.find('.page-title')  # 匹配菜名
             if bool(title):  # 判断匹配结果
-                cache.append(title[0].text)  # 添加有效数据
+                title = emoji.demojize(title[0].text)
+                cache.append(title)  # 添加有效数据
             else:
                 print(item)  # 输出检查以便判断问题
                 cache.append('')  # 添加空数据，避免直接报错
             recipeIngredient = html.html.find('.ings')  # 匹配用料
             if bool(recipeIngredient):  # 判断匹配结果
-                cache.append(recipeIngredient[0].text)  # 添加有效数据
+                recipeIngredient = emoji.demojize(recipeIngredient[0].text)
+                cache.append(recipeIngredient)  # 添加有效数据
             else:
                 print(item)  # 输出检查以便判断问题
                 cache.append('')  # 添加空数据，避免直接报错
@@ -62,7 +66,7 @@ def get_data(url_list):
                 for i in range(len(recipeInstructions)):
                     """遍历匹配结果，这个数据是做法步骤，不同菜品的步骤数不相等，通过遍历组成单个字符串"""
                     steps += recipeInstructions[i].text
-                cache.append(steps)  # 添加有效数据
+                cache.append(emoji.demojize(steps))  # 添加有效数据
             else:
                 print(item)  # 输出检查以便判断问题
                 cache.append('')  # 添加空数据，避免直接报错
@@ -76,6 +80,14 @@ def get_data(url_list):
             url = html.html.find('link[rel=canonical]')  # 匹配详细链接
             if bool(url):  # 判断匹配结果
                 cache.append(url[0].attrs['href'])  # 添加有效数据
+                find = re.compile(
+                    r'https://www.xiachufang.com/recipe/([0-9]+?)/')
+                id = re.findall(find, url[0].attrs['href'])
+                if id:
+                    cache.append(id[0])
+                else:
+                    print(id)
+                    cache.append('')
             else:
                 print(item)  # 输出检查以便判断问题
                 cache.append('')  # 添加空数据，避免直接报错
@@ -86,12 +98,12 @@ def get_data(url_list):
 
 
 def save_data(data):
-    sqlite = sqlite3.connect('本周最受欢迎.db')  # 连接数据库
+    sqlite = sqlite3.connect('菜品数据库.db')  # 连接数据库
     cursor = sqlite.cursor()  # 获取数据库游标
     try:
         """尝试删除旧表"""
         sql = 'DROP TABLE 本周最受欢迎'  # 删除旧表
-        cursor.execute(sql)  # 执行SQL语句，如果不需要删除旧表可以注销此代码
+        cursor.execute(sql)  # 执行SQL语句，如果需要不删除旧表可以注释此段代码
         sqlite.commit()  # 提交更改
     except BaseException:
         pass
@@ -101,7 +113,8 @@ def save_data(data):
         '用料' text,
         '做法' text,
         '效果图' text,
-        '链接' text)'''  # 创建表
+        '链接' text,
+        'ID' text primary key)'''  # 创建表
         cursor.execute(sql)  # 执行SQL语句
         sqlite.commit()  # 提交更改
     for item in data:  # 遍历保存数据
@@ -114,11 +127,35 @@ def save_data(data):
     sqlite.close()  # 关闭数据库
 
 
+def all_data(data):
+    sqlite = sqlite3.connect('菜品数据库.db')  # 连接数据库
+    cursor = sqlite.cursor()  # 获取数据库游标
+    try:
+        sql = '''create table 全部菜品数据
+                ('菜名' text,
+                '用料' text,
+                '做法' text,
+                '效果图' text,
+                '链接' text,
+                'ID' text primary key)'''  # 创建表
+        cursor.execute(sql)  # 执行SQL语句
+        sqlite.commit()  # 提交更改
+    except BaseException:
+        pass
+    for item in data:  # 遍历保存数据
+        sql = '''insert or ignore into 全部菜品数据
+        values(%s)''' % ', '.join(item)  # 插入数据
+        cursor.execute(sql)  # 执行SQL语句
+        sqlite.commit()  # 提交更改
+    sqlite.close()  # 关闭数据库
+
+
 def main():
     list = get_page_url()  # 生成每一页的网址
     url = get_url(list)  # 获取 1 ~ 20 页的全部菜品详细链接
     data = get_data(url)  # 提取数据
     save_data(data)  # 保存数据
+    all_data(data)
 
 
 if __name__ == '__main__':

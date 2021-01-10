@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="本周最受欢迎.db" uuid="f7b2ba3c-2bf6-4bb8-bcfa-c72c02cdfa03">
+    <data-source source="LOCAL" name="菜品数据库" uuid="83eaa3d8-cb97-46a4-ab08-6f51caae75a2">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/本周最受欢迎.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\yongquan\Documents\编程数据\厨房好帮手\菜品数据库.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>
+        </library>
+      </libraries>
     </data-source>
   </component>
 </project>

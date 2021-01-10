@@ -17,12 +17,12 @@ def clear():
         return
 
 
-def download(name, url):
+def download(id, url):
     """下载效果图到本地，name为菜名，url为效果图链接"""
     root = os.getcwd() + r'\static\cache'
     if not os.path.exists(root):
         os.mkdir(root)  # 缓存目录不存在时创建文件夹
-    path = root + '\\' + name + '.jpg'
+    path = root + '\\' + id + '.jpg'
     if os.path.exists(path):  # 效果图已存在时直接返回
         return
     headers = {
@@ -48,3 +48,14 @@ def download(name, url):
             f.close()
     else:
         print('获取图片失败', url, response.status_code)
+
+
+def main():
+    file = input('输入效果图ID：')
+    url = input('输入效果图链接：')
+    clear()
+    download(file, url)
+
+
+if __name__ == '__main__':
+    main()
